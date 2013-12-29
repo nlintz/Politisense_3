@@ -11,9 +11,9 @@
 
 @interface MainView : UIView
 
-@property UILabel *titleLabel;
-@property UITextField *sentimentTextField;
-@property UIButton *sentimentAnalyzeButton;
-@property SentimentView *sentimentView;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UITextView *sentimentTextView;
+@property (nonatomic, strong) UIButton *sentimentAnalyzeButton;
+@property (nonatomic, strong) SentimentView *sentimentView;
 
 @end

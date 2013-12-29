@@ -10,7 +10,7 @@
 
 @interface SentimentModel : NSObject
 
-@property NSString *sentimentType;
+@property (nonatomic, strong) NSString *sentimentType;
 @property float sentimentValue;
 
 - (SentimentModel *)initWithAttrs:(NSString *)sentimentType sentimentValue:(float)sentimentValue;

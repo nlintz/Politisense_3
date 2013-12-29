@@ -10,6 +10,6 @@
 
 @interface Sentiment : NSObject
 
-- (NSDictionary *)getSentiment:(NSString *)sentimentString;
+- (NSMutableArray *)getSentiments:(NSString *)sentimentString;
 
 @end

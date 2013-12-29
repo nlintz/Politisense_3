@@ -11,8 +11,8 @@
 
 @interface SentimentView : UIView
 
-@property UILabel *conservativeLabel, *liberalLabel, *libertarianLabel, *greenLabel;
-@property SentimentModel *conservativeModel, *liberalModel, *libertarianModel, *greenModel;
-@property NSArray *sentimentLabels, *sentimentModels;
+@property (nonatomic, strong)  UILabel *conservativeLabel, *liberalLabel, *libertarianLabel, *greenLabel;
+@property (nonatomic, strong)  SentimentModel *conservativeModel, *liberalModel, *libertarianModel, *greenModel;
+@property (nonatomic, strong)  NSArray *sentimentLabels, *sentimentModels, *sentimentBars;
 
 @end

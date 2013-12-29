@@ -11,7 +11,7 @@
 
 @implementation MainView
 
-@synthesize titleLabel, sentimentAnalyzeButton, sentimentTextField, sentimentView;
+@synthesize titleLabel, sentimentAnalyzeButton, sentimentTextView, sentimentView;
 
 
 - (id)initWithFrame:(CGRect)frame
@@ -22,7 +22,7 @@
 //        Create Subviews
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         self.sentimentAnalyzeButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        self.sentimentTextField = [[UITextField alloc] initWithFrame:CGRectZero];
+        self.sentimentTextView = [[UITextView alloc] initWithFrame:CGRectZero];
         self.sentimentView = [[SentimentView alloc] initWithFrame:CGRectZero];
         
 //        Styling Palatte
@@ -33,12 +33,11 @@
         [self.titleLabel setTextColor:orangeColor];
         [self.titleLabel setFont:[self.titleLabel.font fontWithSize:48]];
         
-//        Styling for sentimentTextField
-        [self.sentimentTextField setBackgroundColor:[UIColor whiteColor]];
-        [self.sentimentTextField setBorderStyle:UITextBorderStyleRoundedRect];
-        [self.sentimentTextField setFont:[UIFont systemFontOfSize:15]];
-        [self.sentimentTextField setPlaceholder:@"Write Text Here"];
-        [self.sentimentTextField setAutocorrectionType:UITextAutocorrectionTypeNo];
+//        Styling for sentimentTextView
+        [self.sentimentTextView setBackgroundColor:[UIColor whiteColor]];
+        [self.sentimentTextView.layer setCornerRadius:5];
+        [self.sentimentTextView setFont:[UIFont systemFontOfSize:15]];
+        [self.sentimentTextView setAutocorrectionType:UITextAutocorrectionTypeNo];
         
 //        Styling for sentimentAnalyzeButton
         [self.sentimentAnalyzeButton setTitle:@"Analyze Sentiment" forState:UIControlStateNormal];
@@ -50,7 +49,7 @@
 //        Add subviews
         [self addSubview:self.titleLabel];
         [self addSubview:self.sentimentAnalyzeButton];
-        [self addSubview:self.sentimentTextField];
+        [self addSubview:self.sentimentTextView];
         [self addSubview:self.sentimentView];
     }
     return self;
@@ -67,10 +66,10 @@
 
 //    Layout for sentimentTextField
     float sentimentTextFieldY = titleLabelY + self.titleLabel.frame.size.height;
-    self.sentimentTextField.frame = CGRectMake(40, sentimentTextFieldY, 240, 95);
+    self.sentimentTextView.frame = CGRectMake(40, sentimentTextFieldY, 240, 95);
     
 //    Layout for sentimentAnalyzeButton
-    float sentimentAnalyzeButtonY = sentimentTextFieldY + sentimentTextField.frame.size.height + 10; //10 px of spacing added
+    float sentimentAnalyzeButtonY = sentimentTextFieldY + sentimentTextView.frame.size.height + 10; //10 px of spacing added
     self.sentimentAnalyzeButton.frame = CGRectMake(40, sentimentAnalyzeButtonY, 240, 30);
 
 //    Layout for sentimentView

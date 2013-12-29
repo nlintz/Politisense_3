@@ -9,10 +9,11 @@
 #import "ViewController.h"
 #import "MainView.h"
 #import "Sentiment.h"
+#import "SentimentModel.h"
 
 @interface ViewController () <UITextFieldDelegate>
 
-@property MainView *mainView;
+@property (nonatomic, strong) MainView *mainView;
 
 - (void)analyzeSentiment:(id)sender;
 
@@ -33,7 +34,7 @@
     self.view = self.mainView;
 
 //    Setup Delegates + Events
-    [self.mainView.sentimentTextField setDelegate:self];
+    [self.mainView.sentimentTextView setDelegate:(id)self];
     [self.mainView.sentimentAnalyzeButton addTarget:self action:@selector(analyzeSentiment:) forControlEvents:UIControlEventTouchUpInside];
 }
 
@@ -46,49 +47,19 @@
 // Callback when user presses the analyze sentiment button
 - (void)analyzeSentiment:(id)sender {
     
-    [self.mainView.sentimentTextField resignFirstResponder];
+    [self.mainView.sentimentTextView resignFirstResponder];
     
-    if (![self.mainView.sentimentTextField.text isEqualToString: @""])
+    if (![self.mainView.sentimentTextView.text isEqualToString: @""])
     {
+        Sentiment *sentimentClient = [[Sentiment alloc] init];
+        NSMutableArray *sentiments = [sentimentClient getSentiments:self.mainView.sentimentTextView.text];
+        [sentiments enumerateObjectsUsingBlock:^(NSNumber *sentimentValue, NSUInteger idx, BOOL *stop) {
+            SentimentModel *sentimentModel = self.mainView.sentimentView.sentimentModels[idx];
+            sentimentModel.sentimentValue = [sentimentValue floatValue];
+            [self.mainView.sentimentView setNeedsLayout];
+        }];
+        
     }
 }
-
-// Makes call using sentiment client to get the sentiment data
-- (NSMutableArray *)getSentiments:(NSString *)sentimentString
-{
-    Sentiment *sentimentClient = [[Sentiment alloc] init];
-    NSDictionary *sentimentDict = [sentimentClient getSentiment:sentimentString];
-    
-    CGFloat conservativeSentiment = [[sentimentDict objectForKey:@"Conservative"] floatValue];
-    CGFloat liberalSentiment = [[sentimentDict objectForKey:@"Liberal"] floatValue];
-    CGFloat libertarianSentiment = [[sentimentDict objectForKey:@"Libertarian"] floatValue];
-    CGFloat greenSentiment = [[sentimentDict objectForKey:@"Green"] floatValue];
-    
-    NSArray *sentiments = [[NSArray alloc] initWithObjects:[NSNumber numberWithFloat:conservativeSentiment],
-                           [NSNumber numberWithFloat:liberalSentiment],
-                           [NSNumber numberWithFloat:libertarianSentiment],
-                           [NSNumber numberWithFloat:greenSentiment],
-                           nil];
-    NSMutableArray *normalizedSentiments = [self normalizeSentiments:sentiments];
-    return normalizedSentiments;
-}
-
-// Sentiment data comes in unnormalized, this function fixes that
-- (NSMutableArray *)normalizeSentiments:(NSArray *)rawSentiments
-{
-    NSMutableArray *normalizedSentiments = [[NSMutableArray alloc] init];
-    float max = [[rawSentiments valueForKeyPath:@"@max.floatValue"] floatValue];
-    float min = [[rawSentiments valueForKeyPath:@"@min.floatValue"] floatValue];
-    float normalizingConstant = .1 * (max - min);
-    
-    for (NSNumber *sentiment in rawSentiments)
-    {
-        float sentimentValue = [sentiment floatValue];
-        float normalizedSentimentValue = (sentimentValue - min + normalizingConstant)/(max - min + normalizingConstant);
-        [normalizedSentiments addObject:[NSNumber numberWithFloat:normalizedSentimentValue]];
-    }
-    return normalizedSentiments;
-}
-
 
 @end
