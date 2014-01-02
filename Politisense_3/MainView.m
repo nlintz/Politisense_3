@@ -10,6 +10,10 @@
 #import "SentimentView.h"
 
 @implementation MainView
+{
+    UILabel *titleLabel;
+    UITextView *sentimentTextView;
+}
 
 @synthesize titleLabel, sentimentAnalyzeButton, sentimentTextView, sentimentView;
 

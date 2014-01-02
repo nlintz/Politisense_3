@@ -9,10 +9,11 @@
 #import "SentimentView.h"
 #import "SentimentModel.h"
 
-CGFloat sentimentLabelWidth = 80.0f;
-CGFloat sentimentLabelHeight = 14.316f;
-CGFloat sentimentLabelY = 223.0f; // 20 px padding from bottom
-CGFloat maxBarHeight = 219.0f; //3 px of padding between bar and bottom
+CGFloat const sentimentLabelWidth = 80.0f;
+CGFloat const sentimentLabelHeight = 14.316f;
+CGFloat const sentimentLabelY = 223.0f; // 20 px padding from bottom
+CGFloat const maxBarHeight = 219.0f; //3 px of padding between bar and bottom
+CGFloat const sentimentTypeFontSize = 12.0f;
 
 @implementation SentimentView
 
@@ -47,7 +48,6 @@ CGFloat maxBarHeight = 219.0f; //3 px of padding between bar and bottom
         
         NSArray *sentimentColors = @[[UIColor redColor], [UIColor blueColor], [UIColor yellowColor], [UIColor greenColor]];
         
-        float sentimentTypeFontSize = 12.0f;
         
         [self.sentimentLabels enumerateObjectsUsingBlock:^(UILabel *sentimentLabel, NSUInteger idx, BOOL *stop) {
             SentimentModel *sentimentModel = self.sentimentModels[idx];
