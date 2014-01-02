@@ -9,6 +9,11 @@
 #import "SentimentView.h"
 #import "SentimentModel.h"
 
+CGFloat sentimentLabelWidth = 80.0f;
+CGFloat sentimentLabelHeight = 14.316f;
+CGFloat sentimentLabelY = 223.0f; // 20 px padding from bottom
+CGFloat maxBarHeight = 219.0f; //3 px of padding between bar and bottom
+
 @implementation SentimentView
 
 @synthesize conservativeLabel, conservativeModel, liberalLabel, liberalModel, libertarianLabel, libertarianModel,greenLabel, greenModel, sentimentLabels=_sentimentLabels, sentimentModels=_sentimentModels, sentimentBars=_sentimentBars;
@@ -67,16 +72,12 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-// <<< I'd make all these number literals (e.g. 12.0f, 4, 20, etc...) constants and define them at the top
-// of the file. >>>
-    CGSize sentimentLabelSize = [self.conservativeLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
-// <<< These should be CGFloats instead of floats. On 64-bit processors (e.g. iPhone 5S) CGFloats are
-// defined as doubles instead of floats. If you use CGFloat, it'll automatically do the right thing
-// for the architecture you're on. >>>
-    float sentimentLabelWidth = self.bounds.size.width / 4;
-    float sentimentLabelHeight = sentimentLabelSize.height;
-    float sentimentLabelY = self.bounds.size.height - sentimentLabelHeight - 20; // 20 px padding from bottom
-    float maxBarHeight = sentimentLabelY - 3; //3 px of padding between bar and bottom
+//    CGSize sentimentLabelSize = [self.conservativeLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
+
+//    float sentimentLabelWidth = self.bounds.size.width / 4;
+//    float sentimentLabelHeight = sentimentLabelSize.height;
+//    float sentimentLabelY = self.bounds.size.height - sentimentLabelHeight - 20; // 20 px padding from bottom
+//    float maxBarHeight = sentimentLabelY - 3; //3 px of padding between bar and bottom
 
     [self.sentimentLabels enumerateObjectsUsingBlock:^(UILabel *sentimentLabel, NSUInteger idx, BOOL *stop) {
         SentimentModel *sentimentModel = self.sentimentModels[idx];

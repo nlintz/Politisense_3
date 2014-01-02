@@ -28,6 +28,10 @@
 //        Styling Palatte
         UIColor *orangeColor = [UIColor colorWithRed:205.0/255 green:138.0/255 blue:21.0/255 alpha:1];
         
+//        Background Color
+        self.backgroundColor = [UIColor colorWithRed:31.0/255 green:33.0/255 blue:36.0/255 alpha:1];
+        
+        
 //        Styling for titleLabel
         [self.titleLabel setText:@"Politisense"];
         [self.titleLabel setTextColor:orangeColor];
@@ -76,6 +80,13 @@
     float sentimentViewY = sentimentAnalyzeButtonY + sentimentAnalyzeButton.frame.size.height + 10;
     float sentimentViewHeight = self.frame.size.height - sentimentViewY;
     self.sentimentView.frame = CGRectMake(0, sentimentViewY, self.bounds.size.width, sentimentViewHeight);    
+}
+
+- (BOOL)resignFirstResponder
+{
+    [super resignFirstResponder];
+    [self.sentimentTextView resignFirstResponder];
+    return YES;
 }
 
 @end
