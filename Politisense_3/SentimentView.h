@@ -11,9 +11,9 @@
 
 @interface SentimentView : UIView
 
-
+- (id)initWithFrame:(CGRect)frame sentimentModels:(NSArray *)_sentimentModels;
+- (void)updateSentimentModels:(NSArray *)sentimentModels;
 @property (nonatomic, strong)  UILabel *conservativeLabel, *liberalLabel, *libertarianLabel, *greenLabel;
-@property (nonatomic, strong)  SentimentModel *conservativeModel, *liberalModel, *libertarianModel, *greenModel;
-@property (nonatomic, strong)  NSArray *sentimentLabels, *sentimentModels, *sentimentBars;
+@property (nonatomic, strong)  NSArray *sentimentLabels, *sentimentBars;
 
 @end

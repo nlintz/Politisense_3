@@ -16,9 +16,10 @@
 // the view controller set data, expose one-off methods to do it. E.g. instead of exposing |sentimentView|
 // directly, expose a method that accepts a SentimentModel and internally uses it to populate your
 // sentiment view. >>>
-@property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UITextView *sentimentTextView;
 @property (nonatomic, strong) UIButton *sentimentAnalyzeButton;
-@property (nonatomic, strong) SentimentView *sentimentView;
+
+- (id)initWithFrame:(CGRect)frame sentimentModels:(NSArray *)sentimentModels;
+-(NSString *)getSentimentText;
+- (void)setSentimentModels:(NSArray *)sentimentModels;
 
 @end

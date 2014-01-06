@@ -16,13 +16,17 @@ CGFloat const maxBarHeight = 219.0f; //3 px of padding between bar and bottom
 CGFloat const sentimentTypeFontSize = 12.0f;
 
 @implementation SentimentView
+{
+    NSArray *sentimentModels;
+}
 
-@synthesize conservativeLabel, conservativeModel, liberalLabel, liberalModel, libertarianLabel, libertarianModel,greenLabel, greenModel, sentimentLabels=_sentimentLabels, sentimentModels=_sentimentModels, sentimentBars=_sentimentBars;
+@synthesize conservativeLabel, liberalLabel, libertarianLabel,greenLabel, sentimentLabels=_sentimentLabels, sentimentBars=_sentimentBars;
 
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(CGRect)frame sentimentModels:(NSArray *)_sentimentModels
 {
     self = [super initWithFrame:frame];
     if (self) {
+        
         self.conservativeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         self.liberalLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         self.libertarianLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -35,22 +39,12 @@ CGFloat const sentimentTypeFontSize = 12.0f;
         UIView *greenBar = [[UIView alloc] initWithFrame:CGRectZero];
         self.sentimentBars = @[conservativeBar, liberalBar, libertarianBar, greenBar];
 
-        
-        self.conservativeModel = [[SentimentModel alloc] initWithAttrs:@"Conservative"
-                                                        sentimentValue:0.0f];
-        self.liberalModel = [[SentimentModel alloc] initWithAttrs:@"Liberal"
-                                                        sentimentValue:0.0f];
-        self.libertarianModel = [[SentimentModel alloc] initWithAttrs:@"Libertarian"
-                                                        sentimentValue:0.0f];
-        self.greenModel = [[SentimentModel alloc] initWithAttrs:@"Green"
-                                                        sentimentValue:0.0f];
-        self.sentimentModels = @[self.conservativeModel, self.liberalModel, self.libertarianModel, self.greenModel];
-        
         NSArray *sentimentColors = @[[UIColor redColor], [UIColor blueColor], [UIColor yellowColor], [UIColor greenColor]];
         
+        sentimentModels = _sentimentModels;
         
         [self.sentimentLabels enumerateObjectsUsingBlock:^(UILabel *sentimentLabel, NSUInteger idx, BOOL *stop) {
-            SentimentModel *sentimentModel = self.sentimentModels[idx];
+            SentimentModel *sentimentModel = sentimentModels[idx];
             UIView *sentimentBar = self.sentimentBars[idx];
             
             sentimentLabel.text = sentimentModel.sentimentType;
@@ -58,7 +52,8 @@ CGFloat const sentimentTypeFontSize = 12.0f;
             sentimentLabel.textColor = [UIColor whiteColor];
             sentimentLabel.font = [sentimentLabel.font fontWithSize:sentimentTypeFontSize];
 
-            sentimentBar.backgroundColor = sentimentColors[idx];
+            UIColor *sentimentColor = sentimentColors[idx];
+            sentimentBar.layer.backgroundColor = sentimentColor.CGColor;
             
             [self addSubview:sentimentLabel];
             [self addSubview:sentimentBar];
@@ -72,19 +67,33 @@ CGFloat const sentimentTypeFontSize = 12.0f;
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-//    CGSize sentimentLabelSize = [self.conservativeLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
-
-//    float sentimentLabelWidth = self.bounds.size.width / 4;
-//    float sentimentLabelHeight = sentimentLabelSize.height;
-//    float sentimentLabelY = self.bounds.size.height - sentimentLabelHeight - 20; // 20 px padding from bottom
-//    float maxBarHeight = sentimentLabelY - 3; //3 px of padding between bar and bottom
 
     [self.sentimentLabels enumerateObjectsUsingBlock:^(UILabel *sentimentLabel, NSUInteger idx, BOOL *stop) {
-        SentimentModel *sentimentModel = self.sentimentModels[idx];
+        SentimentModel *sentimentModel = sentimentModels[idx];
         UIView *sentimentBar = self.sentimentBars[idx];
+        
         sentimentLabel.frame = CGRectMake(idx * sentimentLabelWidth, sentimentLabelY, sentimentLabelWidth, sentimentLabelHeight);
-        sentimentBar.frame = CGRectMake(idx * sentimentLabelWidth, maxBarHeight * (1 - sentimentModel.sentimentValue), sentimentLabelWidth, maxBarHeight * sentimentModel.sentimentValue);
+        NSLog(@"%f", sentimentModel.sentimentValue);
+        sentimentBar.layer.frame = CGRectMake(idx * sentimentLabelWidth, maxBarHeight * (1 - sentimentModel.sentimentValue), sentimentLabelWidth, maxBarHeight * sentimentModel.sentimentValue);
+            sentimentBar.layer.anchorPoint = CGPointMake(1, 1);
+
+        [self resizeAnimation:sentimentBar sentimentModel:sentimentModel idx:idx];
     }];
+}
+
+-(void)resizeAnimation:(UIView *)sentimentBar sentimentModel:(SentimentModel *)sentimentModel idx:(NSUInteger)idx
+{
+    CABasicAnimation *changeHeight = [CABasicAnimation animationWithKeyPath:@"bounds"];
+    [changeHeight setDuration:1.0];
+    [self.sentimentBars enumerateObjectsUsingBlock:^(UIView *sentimentBar, NSUInteger idx, BOOL *stop) {
+        [sentimentBar.layer addAnimation:changeHeight forKey:@"change height animation"];
+    }];
+
+}
+
+- (void)updateSentimentModels:(NSArray *)_sentimentModels
+{
+    sentimentModels = _sentimentModels;
 }
 
 @end

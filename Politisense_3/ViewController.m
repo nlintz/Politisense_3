@@ -14,6 +14,7 @@
 @interface ViewController ()
 
 @property (nonatomic, strong) MainView *mainView;
+@property (nonatomic, strong) SentimentModel *conservativeModel, *liberalModel, *libertarianModel, *greenModel;
 
 - (void)analyzeSentiment:(id)sender;
 
@@ -22,21 +23,32 @@
 @implementation ViewController
 {
     Sentiment *sentimentClient;
+    NSArray *sentimentModels;
 }
-@synthesize mainView;
+@synthesize mainView, conservativeModel, libertarianModel, greenModel;
 
 - (ViewController *)init
 {
     self = [super init];
     if (self){
         sentimentClient = [[Sentiment alloc] init];
+        self.conservativeModel = [[SentimentModel alloc] initWithAttrs:@"Conservative"
+                                                        sentimentValue:0.0f];
+        self.liberalModel = [[SentimentModel alloc] initWithAttrs:@"Liberal"
+                                                   sentimentValue:0.0f];
+        self.libertarianModel = [[SentimentModel alloc] initWithAttrs:@"Libertarian"
+                                                       sentimentValue:0.0f];
+        self.greenModel = [[SentimentModel alloc] initWithAttrs:@"Green"
+                                                 sentimentValue:0.0f];
+        sentimentModels = @[self.conservativeModel, self.liberalModel, self.libertarianModel, self.greenModel];
     }
     return self;
 }
 
 - (void)loadView
 {
-    self.mainView =[[MainView alloc] initWithFrame:CGRectZero];
+    self.mainView =[[MainView alloc] initWithFrame:CGRectZero sentimentModels:sentimentModels];
+//    [self.mainView setSentimentModels:sentimentModels];
     self.view = self.mainView;
 }
 
@@ -51,13 +63,14 @@
   
     [self.mainView resignFirstResponder];
     
-    if (![self.mainView.sentimentTextView.text isEqualToString: @""])
+    NSString *sentimentText = [self.mainView getSentimentText];
+    if (![sentimentText isEqualToString: @""])
     {
-        NSMutableArray *sentiments = [sentimentClient getSentiments:self.mainView.sentimentTextView.text];
+        NSMutableArray *sentiments = [sentimentClient getSentiments:sentimentText];
         [sentiments enumerateObjectsUsingBlock:^(NSNumber *sentimentValue, NSUInteger idx, BOOL *stop) {
-            SentimentModel *sentimentModel = self.mainView.sentimentView.sentimentModels[idx];
+            SentimentModel *sentimentModel = sentimentModels[idx];
             sentimentModel.sentimentValue = [sentimentValue floatValue];
-            [self.mainView.sentimentView setNeedsLayout];
+            [self.mainView setNeedsLayout];
         }];
         
     }
