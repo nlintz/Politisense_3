@@ -73,9 +73,8 @@ CGFloat const sentimentTypeFontSize = 12.0f;
         UIView *sentimentBar = self.sentimentBars[idx];
         
         sentimentLabel.frame = CGRectMake(idx * sentimentLabelWidth, sentimentLabelY, sentimentLabelWidth, sentimentLabelHeight);
-        NSLog(@"%f", sentimentModel.sentimentValue);
         sentimentBar.layer.frame = CGRectMake(idx * sentimentLabelWidth, maxBarHeight * (1 - sentimentModel.sentimentValue), sentimentLabelWidth, maxBarHeight * sentimentModel.sentimentValue);
-            sentimentBar.layer.anchorPoint = CGPointMake(1, 1);
+            sentimentBar.layer.anchorPoint = CGPointMake(0, 1);
 
         [self resizeAnimation:sentimentBar sentimentModel:sentimentModel idx:idx];
     }];
