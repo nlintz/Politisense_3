@@ -73,21 +73,18 @@ CGFloat const sentimentTypeFontSize = 12.0f;
         UIView *sentimentBar = self.sentimentBars[idx];
         
         sentimentLabel.frame = CGRectMake(idx * sentimentLabelWidth, sentimentLabelY, sentimentLabelWidth, sentimentLabelHeight);
+
+        sentimentBar.layer.anchorPoint = CGPointMake(0, 1);
+
+        [UIView beginAnimations : @"ChangeSentimentBarHeight" context:nil];
+        [UIView setAnimationDuration:1];
+        
         sentimentBar.layer.frame = CGRectMake(idx * sentimentLabelWidth, maxBarHeight * (1 - sentimentModel.sentimentValue), sentimentLabelWidth, maxBarHeight * sentimentModel.sentimentValue);
-            sentimentBar.layer.anchorPoint = CGPointMake(0, 1);
 
-        [self resizeAnimation:sentimentBar sentimentModel:sentimentModel idx:idx];
+        [UIView commitAnimations];
+        
+
     }];
-}
-
--(void)resizeAnimation:(UIView *)sentimentBar sentimentModel:(SentimentModel *)sentimentModel idx:(NSUInteger)idx
-{
-    CABasicAnimation *changeHeight = [CABasicAnimation animationWithKeyPath:@"bounds"];
-    [changeHeight setDuration:1.0];
-    [self.sentimentBars enumerateObjectsUsingBlock:^(UIView *sentimentBar, NSUInteger idx, BOOL *stop) {
-        [sentimentBar.layer addAnimation:changeHeight forKey:@"change height animation"];
-    }];
-
 }
 
 - (void)updateSentimentModels:(NSArray *)_sentimentModels
